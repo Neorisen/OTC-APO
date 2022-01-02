@@ -1,0 +1,11 @@
+Module
+  name: client_apoinfo
+  description: 
+  author: Skala
+  website: 
+  sandboxed: true
+  autoload: true
+  autoload-priority: 1000
+  scripts: [ apoinfo ]
+  @onLoad: init()
+  @onUnload: terminate()

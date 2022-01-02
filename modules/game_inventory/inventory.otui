@@ -1,0 +1,425 @@
+InventoryItem < Item
+
+HeadSlot < InventoryItem
+  id: slot1
+  image-source: /images/game/slots/head
+  &position: {x=65535, y=1, z=0}
+
+BodySlot < InventoryItem
+  id: slot4
+  image-source: /images/game/slots/body
+  &position: {x=65535, y=4, z=0}
+
+LegSlot < InventoryItem
+  id: slot7
+  image-source: /images/game/slots/legs
+  &position: {x=65535, y=7, z=0}
+
+FeetSlot < InventoryItem
+  id: slot8
+  image-source: /images/game/slots/feet
+  &position: {x=65535, y=8, z=0}
+
+NeckSlot < InventoryItem
+  id: slot2
+  image-source: /images/game/slots/neck
+  &position: {x=65535, y=2, z=0}
+
+LeftSlot < InventoryItem
+  id: slot6
+  image-source: /images/game/slots/left-hand
+  &position: {x=65535, y=6, z=0}
+
+FingerSlot < InventoryItem
+  id: slot9
+  image-source: /images/game/slots/finger
+  &position: {x=65535, y=9, z=0}
+
+BackSlot < InventoryItem
+  id: slot3
+  image-source: /images/game/slots/back
+  &position: {x=65535, y=3, z=0}
+
+RightSlot < InventoryItem
+  id: slot5
+  image-source: /images/game/slots/right-hand
+  &position: {x=65535, y=5, z=0}
+
+AmmoSlot < InventoryItem
+  id: slot10
+  image-source: /images/game/slots/ammo
+  &position: {x=65535, y=10, z=0}
+
+PurseButton < Button
+  id: purseButton
+  size: 26 26
+  !tooltip: tr('Open purse')
+  icon-source: /images/game/slots/purse
+  icon-size: 24 24
+  icon-offset: 1 1
+  
+HealthBar < ProgressBar
+  id: healthBar
+  background-color: #ff4444
+  anchors.top: parent.top
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin: 1
+  margin-left: 22
+  margin-right: 5
+  height: 12
+
+ManaBar < ProgressBar
+  id: manaBar
+  background-color: #1111a6
+  anchors.top: prev.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin: 1
+  margin-top: 3
+  margin-left: 22
+  margin-right: 5
+  height: 12
+  
+ExperienceBar < ProgressBar
+  id: experienceBar
+  background-color: red
+  anchors.top: manaBar.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin: 1
+  margin-top: 6
+  margin-left: 22
+  margin-right: 5
+  height: 4
+  
+CombatBox < UICheckBox
+  size: 20 20
+  image-clip: 0 0 20 20
+  margin-left: 4
+
+  $checked:
+    image-clip: 0 20 20 20
+    
+InventoryButton < Button
+  font: verdana-11px-antialised
+  height: 18
+  margin-top: 1
+  
+FightOffensiveBox < CombatBox
+  image-source: /images/game/combatmodes/fightoffensive
+FightBalancedBox < CombatBox
+  image-source: /images/game/combatmodes/fightbalanced
+FightDefensiveBox < CombatBox
+  image-source: /images/game/combatmodes/fightdefensive
+ChaseModeBox < CombatBox
+  image-source: /images/game/combatmodes/chasemode
+SafeFightBox < CombatBox
+  image-source: /images/game/combatmodes/safefight
+TaskBox < CombatBox
+  image-source: /images/game/combatmodes/task
+BlessBox < CombatBox
+  image-source: /images/game/combatmodes/bless
+InfoBox < CombatBox
+  image-source: /images/game/combatmodes/hp i mp
+TopInfoBox < CombatBox
+  image-source: /images/game/combatmodes/top info
+  
+ConditionWidget < UIWidget
+  size: 18 18
+
+  $!first:
+    margin-left: 2
+
+HP < UIWidget
+  id: hp
+  image-source: /images/game/combatmodes/HP
+  size: 18 18
+  anchors.top: parent.top
+  anchors.right: healthBar.left
+  margin-right: 2
+  !tooltip: tr('Zycie')
+
+  
+MANA < UIWidget
+  id: mana
+  image-source: /images/game/combatmodes/MANA
+  size: 18 18
+  anchors.right: manaBar.left
+  anchors.top: healthBar.bottom
+  margin-right: 2
+  !tooltip: tr('Mana')
+
+  
+EXP < UIWidget
+  id: exp
+  image-source: /images/game/combatmodes/exp
+  size: 18 18
+  anchors.right: experienceBar.left
+  anchors.top: manaBar.bottom
+  margin-right: 2
+  margin-bottom: 2
+  !tooltip: tr('Poziom doswiadczenia')
+
+  
+SoulCapLabel < GameLabel
+  text-align: center
+  color: #FFFFFF
+  font: cipsoftFont
+  text-offset: 0 3
+  width: 40
+  height: 30
+  icon-source: /images/game/slots/soulcap
+  
+ConditionWidget < UIWidget
+  size: 14 14
+
+  $!first:
+    margin-left: 1
+
+  
+MiniWindow
+  id: inventoryWindow
+  !text: tr('Inventory')
+  icon: /images/topbuttons/inventory
+  height: 246
+  @onClose: modules.game_inventory.onMiniWindowClose()
+  &save: true
+
+  MiniWindowContents
+    HealthBar
+    ManaBar
+    ExperienceBar
+    HP
+    MANA
+    EXP
+    Panel
+      id: conditionPanel
+      layout:
+        type: horizontalBox
+      image-source: /images/game/slots/conditionPanel
+      height: 18
+      width: 100
+      padding: 2
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      border-width: 1
+      border-color: #00000077
+      background-color: #1e2327
+      margin-top: 178
+      margin-left: 5
+      margin-right: 69
+    HeadSlot
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.left
+      margin-left: 58
+      margin-top: 38
+    BodySlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 2
+    LegSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 2
+    FeetSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 2
+    NeckSlot
+      anchors.top: slot1.top
+      anchors.left: parent.left
+      margin-top: 8
+      margin-left: 5
+    LeftSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 3
+    FingerSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 2
+    BackSlot
+      anchors.top: slot1.top
+      anchors.left: slot1.right
+      margin-top: 8
+      margin-left: 5
+    RightSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 2
+    AmmoSlot
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter
+      margin-top: 3
+    PurseButton
+      margin-top: 3
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: prev.horizontalCenter     
+    SoulCapLabel
+      id: soulLabel
+      anchors.top: slot9.bottom
+      anchors.horizontalCenter: slot9.horizontalCenter      
+    SoulCapLabel
+      id: capLabel
+      anchors.top: slot10.bottom
+      anchors.horizontalCenter: slot10.horizontalCenter        
+    GameLabel
+      id: combatControls
+      // CombatBox buttons size
+      size: 65 85
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      //anchors.verticalCenter: slot5.verticalCenter
+      margin-right: 5
+      margin-bottom: 95
+      padding: 0
+      //border-width: 1
+      //border-color: #00000077
+      //background-color: #191919ff
+
+      FightOffensiveBox
+        id: fightOffensiveBox
+        !tooltip: tr('Ofensywa')
+        anchors.top: parent.top
+        anchors.left: parent.left
+      FightBalancedBox
+        id: fightBalancedBox
+        !tooltip: tr('Balans')
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+      FightDefensiveBox
+        id: fightDefensiveBox
+        !tooltip: tr('Defensywa')
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+      ChaseModeBox
+        id: chaseModeBox
+        !tooltip: tr('Podazaj')
+        anchors.top: parent.top
+        anchors.left: fightOffensiveBox.left
+        margin-left: 18
+      SafeFightBox
+        id: safeFightBox
+        !tooltip: tr('Modul walki')
+        anchors.top: prev.bottom
+        anchors.left: fightBalancedBox.left
+        margin-left: 18
+      BlessBox
+        id: blessBox
+        !tooltip: tr('Blessy')
+        anchors.top: parent.top
+        anchors.right: parent.right
+        @onClick: function() g_game.talk('!bless') end
+      TaskBox
+        id: taskBox
+        !tooltip: tr('Taski')
+        anchors.top: parent.top
+        anchors.right: parent.right
+        margin-top: 19
+        @onClick: function() g_game.talk('!task') end
+
+
+  Button
+    id: stopButton
+    !text: tr('Stop')
+    !tooltip: tr('Zaprzestan wykonywania akcji')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 147
+    margin-right: 8
+    width: 60
+    @onClick: function() g_game.cancelAttackAndFollow() end
+
+  Button
+    id: optionsButton
+    !text: tr('Options')
+    !tooltip: tr('Otworz opcje')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 191
+    margin-right: 8
+    width: 60
+    @onClick: modules.client_options.toggle()
+
+  Button
+    id: logoutButton
+    !text: tr('Hotkeys')
+    !tooltip: tr('Otworz hotkeye')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 169
+    margin-right: 8
+    width: 60
+    @onClick: modules.game_hotkeys.toggle()
+    
+  Button
+    id: logoutButton
+    !text: tr('Logout')
+    !tooltip: tr('Wyloguj')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 219
+    margin-right: 8
+    width: 60
+    @onClick: modules.game_interface.tryLogout(prompt)
+    
+  Button
+    id: vipButton
+    !text: tr('VIP')
+    !tooltip: tr('VIP')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 219
+    margin-right: 71
+    width: 37
+    @onClick: modules.game_viplist.toggle()
+    
+  Button
+    id: battleButton
+    !text: tr('Battle')
+    !tooltip: tr('Bitwa')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 219
+    margin-right: 109
+    width: 37
+    @onClick: modules.game_battle.toggle()
+    
+  Button
+    id: skillsButton
+    !text: tr('Skille')
+    !tooltip: tr('Skille')
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 219
+    margin-right: 147
+    width: 37
+    @onClick: modules.game_skills.toggle() 
+
+  UIButton
+    id: minButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 4
+    margin-left: 6
+    size: 10 10
+    @onClick: onInventoryMinimize(not self:isOn())
+
+    $hover:
+      image-clip: 0 14 14 14
+
+    $pressed:
+      image-clip: 0 28 14 14
+
+    $on:
+      image-clip: 14 0 14 14
+
+    $on hover:
+      image-clip: 14 14 14 14
+
+    $on pressed:
+      image-clip: 14 28 14 14
+      
+
