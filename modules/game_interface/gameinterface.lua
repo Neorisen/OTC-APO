@@ -655,6 +655,14 @@ function createThingMenu(menuPosition, lookThing, useThing, creatureThing)
 
     menu:addSeparator()
     menu:addOption(tr('Copy Name'), function() g_window.setClipboardText(creatureThing:getName()) end)
+    if creatureThing:isLocalPlayer() then
+      menu:addSeparator()
+      menu:addOption(tr('Reset exp/h'), function() 
+        g_game.getLocalPlayer().lastExps = nil
+        g_game.getLocalPlayer().expSpeed = 0
+        modules.game_skills.refresh()
+      end)
+    end
   end
 
   menu:display(menuPosition)

@@ -117,7 +117,6 @@ function setSkillTooltip(id, value)
 end
 
 function setSkillPercent(id, percent, tooltip)
-  print(id ..", ".. percent .. ", ".. tooltip)
   local skill = skillsWindow:recursiveGetChildById(id)
   local widget = skill:getChildById('percent')
   widget:setPercent(math.floor(percent))
@@ -192,7 +191,7 @@ function refresh()
   if not player then return end
 
   if expSpeedEvent then expSpeedEvent:cancel() end
-  expSpeedEvent = cycleEvent(checkExpSpeed, 30*1000)
+  expSpeedEvent = cycleEvent(checkExpSpeed, 20*1000)
 
   onExperienceChange(player, player:getExperience())
   onLevelChange(player, player:getLevel(), player:getLevelPercent())
@@ -236,10 +235,22 @@ function checkExpSpeed()
   local player = g_game.getLocalPlayer()
   if not player then return end
 
+  local currentLevel = player:getLevel()
+  local currentPercent = player:getLevelPercent()
   local currentExp = player:getExperience()
   local currentTime = g_clock.seconds()
+
+  if (currentLevel >= 497) and (currentExp == 0) then
+    currentExp = (currentLevel * 100) + currentPercent
+  end
   if player.lastExps ~= nil then
     player.expSpeed = (currentExp - player.lastExps[1][1])/(currentTime - player.lastExps[1][2])
+    -- <===============================================>
+    -- jesli dopiero wbiles 497 lvl i wskakujesz na buga XP to trzeba zresetowac exp/h:
+    if player.expSpeed < 0 then
+      player.lastExps = {}
+      player.expSpeed = 0
+    end
     onLevelChange(player, player:getLevel(), player:getLevelPercent())
   else
     player.lastExps = {}
@@ -270,24 +281,92 @@ function onExperienceChange(localPlayer, value)
   setSkillValue('experience', value)
 end
 
-function onLevelChange(localPlayer, value, percent)
+--[[function onLevelChange(localPlayer, value, percent)
   setSkillValue('level', value)
-  local text = tr('You have %s percent to go', 100 - percent) .. '\n' ..
-               tr('%s of experience left', expToAdvance(localPlayer:getLevel(), localPlayer:getExperience()))
+  local text = tr('You have %s percent to go', 100 - percent)
+  local myLevel = localPlayer:getLevel()
+  local percentLeft = 100 - percent
+  local currentExp = 0
+  if localPlayer:getExperience() ~= 0 and localPlayer:getLevel() < 500 and localPlayer:getLevel() >= 1 then
+    text = text .. '\n' .. tr('%s of experience left to next level', expToAdvance(localPlayer:getLevel(), localPlayer:getExperience()))
+  else
+    if localPlayer:getLevel() < 2590 then
+      local currentLevelExp = expToAdvance(myLevel, expForLevel(myLevel))
+      local expForNextLevel = currentLevelExp * (percentLeft / 100)
+      local myExp = expForLevel(myLevel) + (currentLevelExp * (percent / 100))
+      setSkillValue('experience', myExp)
+      text = text .. '\n' .. tr('%s of experience left to next level', expForNextLevel)
+    end
+  end
 
   if localPlayer.expSpeed ~= nil then
+    if localPlayer:getLevel() <= 2590 and localPlayer:getLevel() >= 497 then
+      currentExp = tonumber(skillsWindow:recursiveGetChildById('experience'):getChildById('value'):getText())
+    else
+      currentExp = localPlayer:getExperience()
+    end
      local expPerHour = math.floor(localPlayer.expSpeed * 3600)
      if expPerHour > 0 then
         local nextLevelExp = expForLevel(localPlayer:getLevel()+1)
-        local hoursLeft = (nextLevelExp - localPlayer:getExperience()) / expPerHour
+        local hoursLeft = (nextLevelExp - currentExp) / expPerHour
         local minutesLeft = math.floor((hoursLeft - math.floor(hoursLeft))*60)
         hoursLeft = math.floor(hoursLeft)
+        modules.client_topmenu.updateExpSpeed(expPerHour, hoursLeft, minutesLeft)
         text = text .. '\n' .. tr('%d of experience per hour', expPerHour)
         text = text .. '\n' .. tr('Next level in %d hours and %d minutes', hoursLeft, minutesLeft)
      end
   end
 
   setSkillPercent('level', percent, text)
+end
+]]
+function onLevelChange(localPlayer, value, percent)
+  setSkillValue('level', value)
+  local myLevel = localPlayer:getLevel()
+  local text = ''
+
+  text = tr('Do kolejnego lvla brakuje Ci %d procent', 100 - percent)
+  if myLevel >= 497 then
+    modules.game_hotkeys.topExperienceBar:setText(tr('%d lvl (%d)', myLevel, percent))
+    if localPlayer.expSpeed ~= nil then
+      local hoursLeft = 0
+      local minutesLeft = 0
+      local percentPerHour = math.floor(localPlayer.expSpeed * 3600)
+      local expPerHour = string.format("%.2f", (percentPerHour / 100))
+      if percentPerHour > 0 then
+          local hoursLeft = (100 - percent) / percentPerHour
+          local minutesLeft = math.floor((hoursLeft - math.floor(hoursLeft))*60)
+          hoursLeft = math.floor(hoursLeft)
+          local topExpBar = "%d lvl (%d%%) | Nastepny poziom za ~ %d minut (%d%%) | %s lvl/h"
+          modules.game_hotkeys.topExperienceBar:setText(tr(topExpBar, myLevel, percent, minutesLeft, 100-percent, expPerHour))
+          text = text .. '\n' .. tr('%s poziomow na godzine', expPerHour)
+          if hoursLeft < 1 then
+            text = text .. '\n' .. tr('Nastepny wbijesz za ~ %d minut', minutesLeft)
+          else
+            text = text .. '\n' .. tr('Nastepny wbijesz za %d godzin i %d minut', hoursLeft, minutesLeft)
+          end
+      end
+    end
+
+  else
+    text = text .. '\n' .. tr('%s expa do nastepnego poziomu', expToAdvance(localPlayer:getLevel(), localPlayer:getExperience()))
+
+    if localPlayer.expSpeed ~= nil then
+       local expPerHour = math.floor(localPlayer.expSpeed * 3600)
+       if expPerHour > 0 then
+          local nextLevelExp = expForLevel(localPlayer:getLevel()+1)
+          local hoursLeft = (nextLevelExp - localPlayer:getExperience()) / expPerHour
+          local minutesLeft = math.floor((hoursLeft - math.floor(hoursLeft))*60)
+          hoursLeft = math.floor(hoursLeft)
+          text = text .. '\n' .. tr('%d of experience per hour', expPerHour)
+          text = text .. '\n' .. tr('Next level in %d hours and %d minutes', hoursLeft, minutesLeft)
+       end
+    end
+  end 
+  setSkillPercent('level', percent, text)
+  if modules.client_topmenu.topMenu:getChildById('expSpeedLabel'):isVisible() == true then
+    modules.client_topmenu.topMenu:getChildById('expSpeedLabel'):setVisible() = false
+  end
 end
 
 function onHealthChange(localPlayer, health, maxHealth)

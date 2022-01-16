@@ -400,9 +400,13 @@ function onManaChange(localPlayer, mana, maxMana)
 end
 
 function onLevelChange(localPlayer, value, percent)
-  topExperienceBar:setText(tr(experienceTooltip, 100 - percent, value+1))
-  topExperienceBar:setTooltip(tr(experienceTooltip, 100 - percent, value+1))
-  topExperienceBar:setPercent(percent) 
+  if localPlayer:getLevel() >= 497 and localPlayer:getExperience() == 0 then
+    -- do nothing
+  else
+    topExperienceBar:setText(tr(experienceTooltip, 100 - percent, value+1))
+    topExperienceBar:setTooltip(tr(experienceTooltip, 100 - percent, value+1))
+  end
+  topExperienceBar:setPercent(percent)
 end
 
 function setHealthTooltip(tooltip)
@@ -442,7 +446,7 @@ function onOverlayGeometryChange()
   else
     topHealthBar:setMarginTop(45)
     topManaBar:setMarginTop(45)
-	topExperienceBar:setMarginTop(45)  
+	  topExperienceBar:setMarginTop(45)  
     minMargin = 200
   end
 

@@ -37,7 +37,7 @@ HealthOverlay < UIWidget
     
   ProgressBar
     id: topExperienceBar
-    background-color: #595959
+    background-color: #e8a107
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.right: parent.right
     anchors.left: parent.left

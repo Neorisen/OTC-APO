@@ -166,7 +166,7 @@ function loadLootList()
   if myFile ~= nil then
     if myFile:seek('end') > 0 then
       for line in io.lines(c_dir) do
-        print("Dodalem do loota:")
+        --print("Dodalem do loota:")
         if line:len() > 3 then
           if line:find(',') then
             --itemsToLoot[count] = line:split(",")
@@ -183,7 +183,7 @@ function loadLootList()
                 itemInfo = itemsList[2]:trim(),
                 color = itemsList[3]:trim() 
               }
-              print(itemsToLoot[count].itemName .. " -> " .. itemsToLoot[count].itemInfo .. " -> " .. itemsToLoot[count].color)
+              --print(itemsToLoot[count].itemName .. " -> " .. itemsToLoot[count].itemInfo .. " -> " .. itemsToLoot[count].color)
             end
           else
             errCount = errCount + 1
