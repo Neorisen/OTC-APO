@@ -658,8 +658,6 @@ function createThingMenu(menuPosition, lookThing, useThing, creatureThing)
     if creatureThing:isLocalPlayer() then
       menu:addSeparator()
       menu:addOption(tr('Reset exp/h'), function() 
-        g_game.getLocalPlayer().lastExps = nil
-        g_game.getLocalPlayer().expSpeed = 0
         modules.game_skills.refresh()
       end)
     end

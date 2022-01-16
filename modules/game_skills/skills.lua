@@ -191,6 +191,11 @@ function refresh()
   if not player then return end
 
   if expSpeedEvent then expSpeedEvent:cancel() end
+  g_game.getLocalPlayer().lastExps = nil
+  g_game.getLocalPlayer().expSpeed = 0
+  if #modules.game_hotkeys.topExperienceBar:getText() > 2 then
+    modules.game_hotkeys.topExperienceBar:setText("")
+  end
   expSpeedEvent = cycleEvent(checkExpSpeed, 20*1000)
 
   onExperienceChange(player, player:getExperience())
@@ -326,8 +331,8 @@ function onLevelChange(localPlayer, value, percent)
   local text = ''
 
   text = tr('Do kolejnego lvla brakuje Ci %d procent', 100 - percent)
+  local topExpBar = ""
   if myLevel >= 497 then
-    modules.game_hotkeys.topExperienceBar:setText(tr('%d lvl (%d)', myLevel, percent))
     if localPlayer.expSpeed ~= nil then
       local hoursLeft = 0
       local minutesLeft = 0
@@ -337,7 +342,7 @@ function onLevelChange(localPlayer, value, percent)
           local hoursLeft = (100 - percent) / percentPerHour
           local minutesLeft = math.floor((hoursLeft - math.floor(hoursLeft))*60)
           hoursLeft = math.floor(hoursLeft)
-          local topExpBar = "%d lvl (%d%%) | Nastepny poziom za ~ %d minut (%d%%) | %s lvl/h"
+          topExpBar = "%d lvl (%d%%) | Nastepny poziom za ~ %d minut (%d%%) | %s lvl/h"
           modules.game_hotkeys.topExperienceBar:setText(tr(topExpBar, myLevel, percent, minutesLeft, 100-percent, expPerHour))
           text = text .. '\n' .. tr('%s poziomow na godzine', expPerHour)
           if hoursLeft < 1 then
@@ -360,12 +365,14 @@ function onLevelChange(localPlayer, value, percent)
           hoursLeft = math.floor(hoursLeft)
           text = text .. '\n' .. tr('%d of experience per hour', expPerHour)
           text = text .. '\n' .. tr('Next level in %d hours and %d minutes', hoursLeft, minutesLeft)
+          topExpBar = "%d level (%d%%) | Nastepny poziom za ~ %d minut (%d%%) | %d exp/h"
+          modules.game_hotkeys.topExperienceBar:setText(tr(topExpBar, myLevel, percent, minutesLeft, 100-percent, expPerHour))
        end
     end
   end 
   setSkillPercent('level', percent, text)
-  if modules.client_topmenu.topMenu:getChildById('expSpeedLabel'):isVisible() == true then
-    modules.client_topmenu.topMenu:getChildById('expSpeedLabel'):setVisible() = false
+  if modules.game_hotkeys.topExperienceBar:getText() == "" and myLevel > 0 then
+    modules.game_hotkeys.topExperienceBar:setText(tr('Brakuje Ci %d%% do %d poziomu.', 100 - localPlayer:getLevelPercent(), myLevel + 1))
   end
 end
 

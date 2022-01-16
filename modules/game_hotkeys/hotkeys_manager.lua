@@ -19,10 +19,10 @@ healthCircle = nil
 manaCircle = nil
 topHealthBar = nil
 topManaBar = nil
-topExperienceBar = 'Brakuje ci %s%% do %d poziomu.'
+topExperienceBar = 'Brakuje Ci %s%% do %d poziomu.'
 healthTooltip = 'Posiadasz %d zycia z %d.'
 manaTooltip = 'Posiadasz %d many z %d.'
-experienceTooltip = 'Brakuje ci %s%% do %d poziomu.'
+experienceTooltip = 'Brakuje Ci %s%% do %d poziomu.'
 
 
 
@@ -400,9 +400,7 @@ function onManaChange(localPlayer, mana, maxMana)
 end
 
 function onLevelChange(localPlayer, value, percent)
-  if localPlayer:getLevel() >= 497 and localPlayer:getExperience() == 0 then
-    -- do nothing
-  else
+  if topExperienceBar:getText() == "" then
     topExperienceBar:setText(tr(experienceTooltip, 100 - percent, value+1))
     topExperienceBar:setTooltip(tr(experienceTooltip, 100 - percent, value+1))
   end
