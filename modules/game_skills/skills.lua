@@ -365,6 +365,7 @@ function onLevelChange(localPlayer, value, percent)
           hoursLeft = math.floor(hoursLeft)
           text = text .. '\n' .. tr('%d of experience per hour', expPerHour)
           text = text .. '\n' .. tr('Next level in %d hours and %d minutes', hoursLeft, minutesLeft)
+          modules.client_topmenu.updateExpSpeed(expPerHour, hoursLeft, minutesLeft)
           topExpBar = "%d level (%d%%) | Nastepny poziom za ~ %d minut (%d%%) | %d exp/h"
           modules.game_hotkeys.topExperienceBar:setText(tr(topExpBar, myLevel, percent, minutesLeft, 100-percent, expPerHour))
        end

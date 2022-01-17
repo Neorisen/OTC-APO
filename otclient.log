@@ -221,3 +221,61 @@ Exiting application..
 OTClient 0.6.5 rev 0 (devel) built on Jun 24 2014 for arch x86
 Zaladowano! :D
 ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: could not get creature
+at:
+	[C++]: ProtocolGame::parseCreatureLight
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+Exiting application..
+== uruchomienie aplikacji Jan 17 2022 00:04:20
+OTClient 0.6.5 rev 0 (devel) built on Jun 24 2014 for arch x86
+Zaladowano! :D
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+Exiting application..
+== uruchomienie aplikacji Jan 17 2022 00:09:22
+OTClient 0.6.5 rev 0 (devel) built on Jun 24 2014 for arch x86
+Zaladowano! :D
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: unable to remove creature
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: no thing at pos:277 156 6, stackpos:1
+at:
+	[C++]: ProtocolGame::getMappedThing
+ERROR: no creature found to move
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: unable to remove creature
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: no thing at pos:278 157 6, stackpos:1
+at:
+	[C++]: ProtocolGame::getMappedThing
+ERROR: no creature found to move
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: unable to remove creature
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: unable to remove creature
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: no thing at pos:278 156 6, stackpos:1
+at:
+	[C++]: ProtocolGame::getMappedThing
+ERROR: no creature found to move
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: no thing at pos:278 157 6, stackpos:1
+at:
+	[C++]: ProtocolGame::getMappedThing
+ERROR: no creature found to move
+at:
+	[C++]: ProtocolGame::parseCreatureMove
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+ERROR: Unable to send extended opcode 1, extended opcodes are not enabled
+Exiting application..
